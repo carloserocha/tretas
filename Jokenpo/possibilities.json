@@ -1,0 +1,7 @@
+{
+    "playes" : {
+        "stone" : "paper",
+        "paper" : "scissors",
+        "scissors" : "stone"
+    }
+}

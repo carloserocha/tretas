@@ -20,6 +20,9 @@ Thread.join()
 Compartilha dados entre Threads por fila
 
 _full()_ -> Verifica se a fila está cheia
+
 _empty()_ -> Verifica se a fila está vazia
+
 _get()_ -> Retorna valores da fila
+
 _put()_ -> insere novos valores na fila

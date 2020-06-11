@@ -41,28 +41,21 @@ func getTrackingDetails(code string) []map[string]string {
 			"statusCode": response.StatusCode,
 			"url":        uri,
 			"tracking":   code,
-		}).Fatal("Dados de rastreamento do item " + code + " não recebido com sucesso")
+		}).Fatal("Impossível carregar a página do item " + code)
 	}
 
-	log.WithFields(log.Fields{
-		"statusCode": response.StatusCode,
-		"url":        uri,
-		"tracking":   code,
-	}).Info("Dados de rastreamento do item " + code + " recebido com sucesso")
+	// body, _ := ioutil.ReadAll(response.Body)
 
 	defer response.Body.Close()
 
+	// println(string(body))
+
 	doc, err := goquery.NewDocumentFromResponse(response)
-
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	r, err := regexp.Compile("[\n\r\t]")
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	r, _ := regexp.Compile("[\n\r\t]")
 	splitWhiteSpace := regexp.MustCompile(`\s\s+`)
 
 	var details = []map[string]string{}
@@ -84,6 +77,21 @@ func getTrackingDetails(code string) []map[string]string {
 		})
 		details = append(details, detail)
 	})
+
+	if len(details) > 0 {
+		log.WithFields(log.Fields{
+			"statusCode": response.StatusCode,
+			"url":        uri,
+			"tracking":   code,
+		}).Info("Dados de rastreamento do item " + code + " recebido com sucesso")
+	} else {
+		log.WithFields(log.Fields{
+			"statusCode": response.StatusCode,
+			"url":        uri,
+			"tracking":   code,
+		}).Warn("Dados de rastreamento do item " + code + " inexistentes")
+	}
+
 	return details
 }
 

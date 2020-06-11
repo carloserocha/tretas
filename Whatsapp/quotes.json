@@ -1,0 +1,14 @@
+{
+    "quotes" : [
+        {
+            "min" : 8,
+            "max" : 14,
+            "msg" : "Bom dia meu pedaço de hibisco do alto cume! Estás explendidx!"
+        },
+        {
+            "min" : 14,
+            "max" : 22,
+            "msg" : "bom dia! nao desista pq hj é um novo dia e vc precisa ter força. faça oq vc planejou e coma fruta."
+        }
+    ]
+}

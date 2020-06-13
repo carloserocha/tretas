@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, Form, Grid } from 'semantic-ui-react'
 import request from 'superagent'
 
-const URI = 'http://192.168.15.70:8000/rastreio/correios'
+const URI = 'http://localhost:8000/rastreio/correios'
 
 /*const levels = [
   {
@@ -56,7 +56,7 @@ class TrackingTable extends React.Component {
 
   myChangeHandler = (event) => {
     this.setState({ tracking_code: event.target.value });
-    if (this.state.tracking_code.length > 11) {
+    if (this.state.tracking_code.length > 10) {
       this.setState({ tracking_code: event.target.value });
       request
         .get(`${URI}/${event.target.value}`)
@@ -105,7 +105,9 @@ class TrackingTable extends React.Component {
             />
           </Form.Group>
         </Form>
-        <Table>
+        </Grid.Column>
+        <Grid.Column>
+        <Table padded>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Hora</Table.HeaderCell>
@@ -113,7 +115,6 @@ class TrackingTable extends React.Component {
               <Table.HeaderCell>Observação</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
-
           <Table.Body>
             {this.renderTableData()}
           </Table.Body>

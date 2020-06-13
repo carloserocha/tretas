@@ -1,11 +1,15 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strings"
+
+	"golang.org/x/text/encoding/charmap"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gorilla/mux"
@@ -35,7 +39,13 @@ func getTrackingDetails(code string) []map[string]string {
 	params := url.Values{}
 	params.Add("objetos", code)
 
-	response, err := http.PostForm(uri, params)
+	req, err := http.NewRequest("POST", uri, strings.NewReader(params.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+	req.Header.Set("Accept-Charset", "utf-8")
+	//req.Header.Add("Accept-Charset", "ISO-8859-1;utf-8;q0.7,*;q=0.7")
+	// req.Header.Add("Content-Type", "text/html;")
+	response, err := http.DefaultClient.Do(req)
+	//response, err := http.PostForm(uri, params)
 
 	if err != nil {
 		log.WithFields(log.Fields{
@@ -45,16 +55,15 @@ func getTrackingDetails(code string) []map[string]string {
 		}).Fatal("Impossível carregar a página do item " + code)
 	}
 
-	// body, _ := ioutil.ReadAll(response.Body)
-
 	defer response.Body.Close()
 
-	// println(string(body))
+	body, _ := ioutil.ReadAll(response.Body)
+	dec := charmap.Windows1250.NewDecoder()
+	output, _ := dec.Bytes(body)
 
-	doc, err := goquery.NewDocumentFromResponse(response)
-	if err != nil {
-		log.Fatal(err)
-	}
+	doc, _ := goquery.NewDocumentFromReader(
+		bytes.NewReader(output),
+	)
 
 	r, _ := regexp.Compile("[\n\r\t]")
 	splitWhiteSpace := regexp.MustCompile(`\s\s+`)

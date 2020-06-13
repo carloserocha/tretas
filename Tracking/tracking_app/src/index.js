@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Container } from "semantic-ui-react";
 
-import TrackingTable from "./TrackingTable";
+import Tracking from "./tracking"
 
 const App = ({ children }) => (
   <Container style={{ margin: 20 }}>
@@ -17,7 +17,7 @@ document.head.appendChild(styleLink);
 
 ReactDOM.render(
   <App>
-    <TrackingTable />
+    <Tracking />
   </App>,
   document.getElementById("root")
 );
